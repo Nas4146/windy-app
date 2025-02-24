@@ -3,7 +3,22 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 // Load environment variables from .env file
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, '.env.test') });
+
+// Verify required environment variables
+const requiredEnvVars = [
+  'VITE_FIREBASE_API_KEY',
+  'VITE_FIREBASE_AUTH_DOMAIN',
+  'VITE_FIREBASE_PROJECT_ID'
+];
+
+for (const envVar of requiredEnvVars) {
+  if (!process.env[envVar]) {
+    console.error(`Missing required environment variable: ${envVar}`);
+    console.error('Please create e2e/.env.test from e2e/.env.test.example');
+    process.exit(1);
+  }
+}
 
 export default defineConfig({
   testDir: './tests',
