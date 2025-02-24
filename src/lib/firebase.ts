@@ -1,7 +1,7 @@
 import { initializeApp, getApps } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { doc, setDoc, deleteDoc } from 'firebase/firestore';
+import { getFirestore, enableIndexedDbPersistence } from 'firebase/firestore';
 import { getAnalytics } from 'firebase/analytics';
-import { browser } from '$app/environment';
 
 
 const firebaseConfig = {
@@ -16,4 +16,25 @@ const firebaseConfig = {
 // Initialize Firebase only if it hasn't been initialized already
 export const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
 export const db = getFirestore(app);
-export const analytics = browser ? getAnalytics(app) : null;
+
+// Only initialize analytics in the browser
+export const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
+
+console.log('Firebase initialized with config:', {
+  ...firebaseConfig,
+  apiKey: '***'  // Hide sensitive data
+});
+
+// Test Firestore connection
+const testConnection = async () => {
+  try {
+      const testDoc = doc(db, '_test_connection', 'test');
+      await setDoc(testDoc, { timestamp: new Date() }, { merge: true });
+      console.log('Firestore connection successful');
+      await deleteDoc(testDoc); // Clean up test document
+  } catch (error) {
+      console.error('Firestore connection error:', error);
+  }
+};
+
+testConnection();
