@@ -75,6 +75,9 @@ export async function GET({ url, cookies }) {
             });
         }
 
+        console.log('Received tokens from Auth0:', tokens);
+        console.log('User info from Auth0:', user);
+
         // Set session for existing users
         cookies.set('temp_session', JSON.stringify({ user }), {
             path: '/',
@@ -83,6 +86,7 @@ export async function GET({ url, cookies }) {
             sameSite: 'lax',
             maxAge: 60 * 60 // 1 hour
         });
+        console.log('Set temp_session cookie');
 
         return new Response(null, {
             status: 303,

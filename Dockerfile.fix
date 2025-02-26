@@ -1,0 +1,14 @@
+# Use the existing image as the base image
+FROM 198219751740.dkr.ecr.us-west-2.amazonaws.com/windy-app:latest
+
+# Copy the custom entrypoint script into the container
+COPY docker-entrypoint-custom.sh /docker-entrypoint-custom.sh
+
+# Ensure we are root so that we can change permissions
+USER root
+RUN chmod +x /docker-entrypoint-custom.sh
+
+# Use the custom script as the entrypoint, then run the main command.
+ENTRYPOINT ["/docker-entrypoint-custom.sh"]
+
+CMD ["node", "/app/server/index.js"]
