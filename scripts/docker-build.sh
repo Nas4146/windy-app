@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Read environment variables from .env file
+source .env
+
+# Build Docker image with environment variables
+docker build -t windy-app \
+  --build-arg VITE_FIREBASE_API_KEY="$VITE_FIREBASE_API_KEY" \
+  --build-arg VITE_FIREBASE_AUTH_DOMAIN="$VITE_FIREBASE_AUTH_DOMAIN" \
+  --build-arg VITE_FIREBASE_PROJECT_ID="$VITE_FIREBASE_PROJECT_ID" \
+  --build-arg VITE_FIREBASE_STORAGE_BUCKET="$VITE_FIREBASE_STORAGE_BUCKET" \
+  --build-arg VITE_FIREBASE_MESSAGING_SENDER_ID="$VITE_FIREBASE_MESSAGING_SENDER_ID" \
+  --build-arg VITE_FIREBASE_APP_ID="$VITE_FIREBASE_APP_ID" \
+  --build-arg VITE_FIREBASE_MEASUREMENT_ID="$VITE_FIREBASE_MEASUREMENT_ID" \
+  --build-arg VITE_CLIENT_EMAIL="$VITE_CLIENT_EMAIL" \
+  --build-arg VITE_FIREBASE_PRIVATE_KEY="$VITE_FIREBASE_PRIVATE_KEY" \
+  .

@@ -54,14 +54,15 @@
     {:else if boards && boards.length > 0}
       <div class="flex items-center gap-4">
         <select
-          bind:value={selectedBoardId}
-          class="board-select"
-        >
-          <option value={null}>Select a board...</option>
-          {#each boards as board}
-            <option value={board.id}>{board.title}</option>
-          {/each}
-        </select>
+        bind:value={selectedBoardId}
+        class="board-select"
+        aria-label="Select a board"
+      >
+        <option value={null}>Select a board...</option>
+        {#each boards as board}
+          <option value={board.id}>{board.title}</option>
+        {/each}
+      </select>
         
         <button 
           class="btn btn-primary"

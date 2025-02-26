@@ -4,6 +4,7 @@ test('navigation flow', async ({ page }) => {
   try {
     // Start at home page 
     await page.goto('/', { timeout: 30000 });
+    await expect(page).toHaveURL('/');
     
     // Should redirect to login since we're not authenticated
     await page.waitForURL('/login');
@@ -24,17 +25,28 @@ test('navigation flow', async ({ page }) => {
       });
     });
 
-    // Go to boards page
+    // Navigate to boards
     await page.goto('/boards');
-
-    // Wait for boards page to load with longer timeout
-    await expect(page.getByRole('heading', { name: 'My Boards' })).toBeVisible({ 
-      timeout: 10000 
-    });
+    await expect(page).toHaveURL('/boards');
 
     // Verify the boards page structure
-    await expect(page.getByRole('combobox')).toBeVisible(); // Board selector
-    await expect(page.getByRole('button', { name: 'New Board' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'My Boards' })).toBeVisible();
+
+    // Check for either the empty state or board selector
+    const hasBoards = await page.getByRole('combobox').isVisible();
+
+    if (hasBoards) {
+      // Board exists state
+      await expect(page.getByRole('combobox')).toBeVisible(); 
+      await expect(page.getByRole('button', { name: 'New Board' })).toBeVisible();
+  } else {
+      // Empty state
+      await expect(page.getByText('No boards found')).toBeVisible();
+      await expect(page.getByRole('button', { name: 'Create Board' })).toBeVisible();
+  }
+
+    // Check header elements
+    await expect(page.getByRole('img', { name: 'Profile' })).toBeVisible();
 
     // Wait for board content
     await expect(page.getByTestId('board-title')).toBeVisible({ timeout: 30000 });

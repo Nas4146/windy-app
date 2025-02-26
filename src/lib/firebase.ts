@@ -1,6 +1,6 @@
 import { initializeApp, getApps } from 'firebase/app';
 import { doc, setDoc, deleteDoc } from 'firebase/firestore';
-import { getFirestore, enableIndexedDbPersistence } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
 import { getAnalytics } from 'firebase/analytics';
 
 

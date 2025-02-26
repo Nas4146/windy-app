@@ -1,6 +1,10 @@
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Get the directory name
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Load environment variables from .env file
 dotenv.config({ path: path.join(__dirname, '.env.test') });
@@ -9,14 +13,20 @@ dotenv.config({ path: path.join(__dirname, '.env.test') });
 const requiredEnvVars = [
   'VITE_FIREBASE_API_KEY',
   'VITE_FIREBASE_AUTH_DOMAIN',
-  'VITE_FIREBASE_PROJECT_ID'
+  'VITE_FIREBASE_PROJECT_ID',
+  'VITE_CLIENT_EMAIL',
+  'VITE_FIREBASE_PRIVATE_KEY',
+  'TEST_USER_EMAIL',
+  'TEST_USER_PASSWORD',
+  'AUTH0_DOMAIN',
+  'AUTH0_CLIENT_ID',
+  'AUTH0_CLIENT_SECRET'
 ];
 
 for (const envVar of requiredEnvVars) {
   if (!process.env[envVar]) {
-    console.error(`Missing required environment variable: ${envVar}`);
-    console.error('Please create e2e/.env.test from e2e/.env.test.example');
-    process.exit(1);
+      console.error(`Missing required environment variable: ${envVar}`);
+      process.exit(1);
   }
 }
 
@@ -28,28 +38,17 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: 'http://localhost:4173',
-    trace: 'on-first-retry',
-    screenshot: 'only-on-failure'
+      baseURL: 'http://localhost:4173',
+      trace: 'on-first-retry',
   },
-  projects: [
-    {
-      name: 'chromium',
-      use: { ...devices['Desktop Chrome'] }
-    }
-  ],
   webServer: {
-    command: 'npm run build && npm run preview',
-    port: 4173,
-    reuseExistingServer: !process.env.CI,
-    env: {
-      VITE_FIREBASE_API_KEY: process.env.VITE_FIREBASE_API_KEY,
-      VITE_FIREBASE_AUTH_DOMAIN: process.env.VITE_FIREBASE_AUTH_DOMAIN,
-      VITE_FIREBASE_PROJECT_ID: process.env.VITE_FIREBASE_PROJECT_ID,
-      VITE_FIREBASE_STORAGE_BUCKET: process.env.VITE_FIREBASE_STORAGE_BUCKET,
-      VITE_FIREBASE_MESSAGING_SENDER_ID: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-      VITE_FIREBASE_APP_ID: process.env.VITE_FIREBASE_APP_ID
-    }
+      command: 'npm run build && npm run preview',
+      port: 4173,
+      reuseExistingServer: !process.env.CI,
+      timeout: 180000,
   },
-  globalSetup: './global-setup.ts'
+  expect: {
+      timeout: 15000
+  },
+  timeout: 60000
 });

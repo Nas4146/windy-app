@@ -107,16 +107,16 @@
                     </div>
 
                     <!-- Profile Info -->
-                    <div class="space-y-4">
+                    <dl class="space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Display Name</label>
-                            <p class="mt-1 text-gray-900">{data.profile.displayName}</p>
+                            <dt class="block text-sm font-medium text-gray-700">Display Name</dt>
+                            <dd class="mt-1 text-gray-900">{data.profile.displayName}</dd>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700">Email</label>
-                            <p class="mt-1 text-gray-900">{data.profile.email}</p>
+                            <dt class="block text-sm font-medium text-gray-700">Email</dt>
+                            <dd class="mt-1 text-gray-900">{data.profile.email}</dd>
                         </div>
-                    </div>
+                    </dl>
 
                     <!-- Logout Button -->
                     <div class="pt-4 border-t border-gray-200">
